@@ -1,6 +1,7 @@
 package com.example.storm
 
 import android.app.Application
+import com.example.storm.di.locationRepoModule
 import com.example.storm.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +15,8 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
-                    viewModelModule
+                    viewModelModule,
+                    locationRepoModule
                 )
             )
         }
