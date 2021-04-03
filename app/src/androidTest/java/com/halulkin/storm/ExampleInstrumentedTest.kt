@@ -1,4 +1,4 @@
-package com.example.storm
+package com.halulkin.storm
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

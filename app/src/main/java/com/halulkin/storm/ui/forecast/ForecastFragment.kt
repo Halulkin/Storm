@@ -1,4 +1,4 @@
-package com.example.storm.ui.forecast
+package com.halulkin.storm.ui.forecast
 
 import android.os.Bundle
 import android.view.LayoutInflater

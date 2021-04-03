@@ -1,7 +1,7 @@
-package com.example.storm.di
+package com.halulkin.storm.di
 
-import com.example.storm.ui.forecast.ForecastViewModel
-import com.example.storm.ui.weather.WeatherViewModel
+import com.halulkin.storm.ui.forecast.ForecastViewModel
+import com.halulkin.storm.ui.weather.WeatherViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

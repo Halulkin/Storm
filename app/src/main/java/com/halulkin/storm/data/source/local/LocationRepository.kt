@@ -1,4 +1,4 @@
-package com.example.storm.data.source.local
+package com.halulkin.storm.data.source.local
 
 class LocationRepository(private val locationManager: LocationManager) {
 

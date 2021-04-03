@@ -1,7 +1,7 @@
-package com.example.storm.di
+package com.halulkin.storm.di
 
-import com.example.storm.data.source.local.LocationManager
-import com.example.storm.data.source.local.LocationRepository
+import com.halulkin.storm.data.source.local.LocationManager
+import com.halulkin.storm.data.source.local.LocationRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

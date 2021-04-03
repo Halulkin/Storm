@@ -1,4 +1,4 @@
-package com.example.storm.ui.weather
+package com.halulkin.storm.ui.weather
 
 import android.Manifest
 import android.content.Intent
@@ -13,8 +13,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.storm.R
 import com.example.storm.databinding.FragmentWeatherBinding
-import com.example.storm.utils.hasPermission
-import com.example.storm.utils.isGpsEnabled
+import com.halulkin.storm.utils.hasPermission
+import com.halulkin.storm.utils.isGpsEnabled
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices

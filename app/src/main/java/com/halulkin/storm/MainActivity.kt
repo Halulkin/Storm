@@ -1,9 +1,10 @@
-package com.example.storm
+package com.halulkin.storm
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.storm.R
 import com.example.storm.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

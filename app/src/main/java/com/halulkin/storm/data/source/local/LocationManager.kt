@@ -1,4 +1,4 @@
-package com.example.storm.data.source.local
+package com.halulkin.storm.data.source.local
 
 import android.Manifest
 import android.content.Context
@@ -8,7 +8,7 @@ import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.storm.utils.hasPermission
+import com.halulkin.storm.utils.hasPermission
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
 

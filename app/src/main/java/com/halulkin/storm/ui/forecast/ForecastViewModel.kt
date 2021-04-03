@@ -1,4 +1,4 @@
-package com.example.storm.ui.forecast
+package com.halulkin.storm.ui.forecast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

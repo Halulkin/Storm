@@ -1,4 +1,4 @@
-package com.example.storm
+package com.halulkin.storm
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.storm.utils
+package com.halulkin.storm.utils
 
 import android.Manifest
 import android.content.Context
