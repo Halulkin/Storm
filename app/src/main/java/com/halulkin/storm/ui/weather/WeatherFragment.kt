@@ -20,6 +20,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.material.snackbar.Snackbar
+import com.halulkin.storm.base.BaseFragment
+import com.halulkin.storm.base.RxViewModel
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -28,32 +30,29 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WeatherFragment : Fragment() {
+class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
 
-    private val weatherViewModel by viewModel<WeatherViewModel>()
+    override val layoutResource: Int get() = R.layout.fragment_weather
+    override val viewModel by viewModel<WeatherViewModel>()
 
-    private var _binding: FragmentWeatherBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
+    override fun initData() {
 
         showWeather()
 
-        weatherViewModel.location.observe(viewLifecycleOwner, {
+        viewModel.location.observe(viewLifecycleOwner, {
             binding.tvCityName.text = it?.latitude.toString() + ", " + it?.longitude.toString()
-            binding.swiperefresh.isRefreshing = false
+            binding.swipeRefresh.isRefreshing = false
         })
 
-        binding.swiperefresh.setOnRefreshListener {
+        binding.swipeRefresh.setOnRefreshListener {
             showWeather()
         }
 
-        return binding.root
+        binding.apply {
+            lifecycleOwner = this@WeatherFragment
+            viewModel.getData()
+            weatherVM = viewModel
+        }
     }
 
     private fun showWeather() {
@@ -65,7 +64,7 @@ class WeatherFragment : Fragment() {
         if (activity.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
             activity.isGpsEnabled()
         ) {
-            weatherViewModel.getLastLocation()
+            viewModel.getLastLocation()
         } else {
             getGpsLocation()
         }
@@ -74,13 +73,13 @@ class WeatherFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume:")
-        weatherViewModel.startLocationUpdates()
+        viewModel.startLocationUpdates()
     }
 
     override fun onPause() {
         super.onPause()
         Log.e(TAG, "onPause:")
-        weatherViewModel.stopLocationUpdates()
+        viewModel.stopLocationUpdates()
     }
 
     private fun getGpsLocation() {
@@ -120,7 +119,7 @@ class WeatherFragment : Fragment() {
                         // show snackBar allowing app setting navigation
                         Snackbar
                             .make(
-                                binding.layout,
+                                binding.swipeRefresh,
                                 getString(R.string.change_location_permission),
                                 Snackbar.LENGTH_LONG
                             )
@@ -140,7 +139,7 @@ class WeatherFragment : Fragment() {
                         // show snackBar with rationale
                         Snackbar
                             .make(
-                                binding.layout,
+                                binding.swipeRefresh,
                                 getString(R.string.permission_rejection_text),
                                 Snackbar.LENGTH_LONG
                             )
@@ -155,11 +154,6 @@ class WeatherFragment : Fragment() {
                     token?.continuePermissionRequest()
                 }
             }).check()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

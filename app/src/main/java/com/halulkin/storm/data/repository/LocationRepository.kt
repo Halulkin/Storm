@@ -1,4 +1,6 @@
-package com.halulkin.storm.data.source.local
+package com.halulkin.storm.data.repository
+
+import com.halulkin.storm.data.source.local.LocationManager
 
 class LocationRepository(private val locationManager: LocationManager) {
 

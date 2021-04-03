@@ -13,4 +13,5 @@
     <string name="change_location_permission">Change location permission in app settings</string>
     <string name="permission_rejection_text">Location permission is needed for showing current location weather.</string>
     <string name="ok">OK</string>
+    <string name="error">Error</string>
 </resources>

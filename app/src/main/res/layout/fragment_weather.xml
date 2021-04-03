@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swiperefresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/layout"
+    <data>
+
+        <variable
+            name="weatherVM"
+            type="com.halulkin.storm.ui.weather.WeatherViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.LocationFragment">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <View
-                android:id="@+id/locationBacgroundView"
+                android:id="@+id/locationBackgroundView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="32dp"
@@ -29,11 +32,11 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <View
-                android:id="@+id/wave"
+                android:id="@+id/vWave"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/ic_wave"
-                app:layout_constraintBottom_toBottomOf="@+id/locationBacgroundView" />
+                app:layout_constraintBottom_toBottomOf="@+id/locationBackgroundView" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -83,7 +86,7 @@
 
 
             <ImageView
-                android:id="@+id/imgState"
+                android:id="@+id/ivState"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_marginTop="8dp"
@@ -104,14 +107,14 @@
                     android:layout_height="match_parent">
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdPressure"
+                        android:id="@+id/cvPressure"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="8dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toTopOf="@+id/crdHumidity"
-                        app:layout_constraintEnd_toStartOf="@+id/crdWind"
+                        app:layout_constraintBottom_toTopOf="@+id/cvHumidity"
+                        app:layout_constraintEnd_toStartOf="@+id/cvWind"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent">
 
@@ -145,17 +148,17 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdWind"
+                        android:id="@+id/cvWind"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/crdPressure"
-                        app:layout_constraintEnd_toStartOf="@+id/crdSunrise"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvPressure"
+                        app:layout_constraintEnd_toStartOf="@+id/cvSunrise"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/crdPressure"
-                        app:layout_constraintTop_toTopOf="@+id/crdPressure">
+                        app:layout_constraintStart_toEndOf="@+id/cvPressure"
+                        app:layout_constraintTop_toTopOf="@+id/cvPressure">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -187,16 +190,16 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdSunrise"
+                        android:id="@+id/cvSunrise"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/crdWind"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvWind"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/crdWind"
-                        app:layout_constraintTop_toTopOf="@+id/crdWind">
+                        app:layout_constraintStart_toEndOf="@+id/cvWind"
+                        app:layout_constraintTop_toTopOf="@+id/cvWind">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -229,14 +232,14 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdHumidity"
+                        android:id="@+id/cvHumidity"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="72dp"
                         app:cardCornerRadius="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/crdVisibility"
+                        app:layout_constraintEnd_toStartOf="@+id/cvVisibility"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent">
 
@@ -270,18 +273,18 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdVisibility"
+                        android:id="@+id/cvVisibility"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="132dp"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/crdHumidity"
-                        app:layout_constraintEnd_toStartOf="@+id/crdSunset"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvHumidity"
+                        app:layout_constraintEnd_toStartOf="@+id/cvSunset"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/crdHumidity"
-                        app:layout_constraintTop_toTopOf="@+id/crdHumidity"
+                        app:layout_constraintStart_toEndOf="@+id/cvHumidity"
+                        app:layout_constraintTop_toTopOf="@+id/cvHumidity"
                         app:layout_constraintVertical_bias="1.0">
 
                         <LinearLayout
@@ -314,16 +317,16 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/crdSunset"
+                        android:id="@+id/cvSunset"
                         android:layout_width="0dp"
                         android:layout_height="105dp"
                         android:layout_marginEnd="8dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/crdVisibility"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvVisibility"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/crdVisibility"
-                        app:layout_constraintTop_toTopOf="@+id/crdVisibility"
+                        app:layout_constraintStart_toEndOf="@+id/cvVisibility"
+                        app:layout_constraintTop_toTopOf="@+id/cvVisibility"
                         app:layout_constraintVertical_bias="0.0">
 
                         <LinearLayout
@@ -364,17 +367,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ProgressBar
-            android:id="@+id/locationLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </ProgressBar>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>
