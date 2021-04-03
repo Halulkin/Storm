@@ -1,7 +1,12 @@
 package com.example.storm.ui.weather
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.res.Resources
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -12,9 +17,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.storm.R
 import com.example.storm.databinding.FragmentWeatherBinding
+import com.example.storm.utils.hasPermission
+import com.example.storm.utils.isGpsEnabled
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -31,6 +37,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class WeatherFragment : Fragment() {
 
     private val weatherViewModel by viewModel<WeatherViewModel>()
+    private lateinit var gpsSwitchStateReceiver: BroadcastReceiver
+    var gpsEnabled = false
 
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
@@ -46,18 +54,44 @@ class WeatherFragment : Fragment() {
 
         getGpsLocation()
 
-
-        val textView: TextView = binding.textDashboard
-
         weatherViewModel.location.observe(viewLifecycleOwner, {
             Log.e(
                 "TAG",
                 "Update from far: " + it?.latitude.toString() + ", " + it?.longitude.toString()
             )
-            textView.text = it?.latitude.toString() + ", " + it?.longitude.toString()
+            binding.tvCityName.text = it?.latitude.toString() + ", " + it?.longitude.toString()
         })
 
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e(TAG, "onResume: ")
+        gpsEnabled = requireActivity().isGpsEnabled()
+        weatherViewModel.startLocationUpdates()
+        registerGpsSwitchStateReceiver()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(TAG, "onPause:")
+        weatherViewModel.stopLocationUpdates()
+        unregisterGpsSwitchStateReceiver()
+    }
+
+    fun setupViews() {
+        val activity = requireActivity()
+        if (activity.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            gpsEnabled
+        ) {
+
+            binding.tvCityName.text = binding.tvCityName.text.toString().apply {
+                this + "Hello"
+            }
+        } else {
+            binding.tvCityName.text = "wewewewewe"
+        }
     }
 
     private fun getGpsLocation() {
@@ -79,7 +113,7 @@ class WeatherFragment : Fragment() {
                         )
                     result.addOnSuccessListener {
 //                        showWeather()
-                        weatherViewModel.getLastLocation()
+                        weatherViewModel.startLocationUpdates()
                         Toast.makeText(context, "Ready to show weather!", Toast.LENGTH_SHORT).show()
                         Log.e("TAG", "addOnSuccessListener")
 
@@ -136,8 +170,28 @@ class WeatherFragment : Fragment() {
             }).check()
     }
 
+    private fun registerGpsSwitchStateReceiver() {
+        gpsSwitchStateReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent?) {
+                gpsEnabled = context.isGpsEnabled()
+                setupViews()
+            }
+        }
+        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        filter.addAction(Intent.ACTION_PROVIDER_CHANGED)
+        requireActivity().registerReceiver(gpsSwitchStateReceiver, filter)
+    }
+
+    private fun unregisterGpsSwitchStateReceiver() {
+        requireActivity().unregisterReceiver(gpsSwitchStateReceiver)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "WeatherFragment"
     }
 }
