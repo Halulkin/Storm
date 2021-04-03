@@ -2,4 +2,15 @@
     <string name="app_name">Storm</string>
     <string name="title_weather">Weather</string>
     <string name="title_forecast">Forecast</string>
+
+    <string name="text_pressure">Pressure</string>
+    <string name="text_wind">Wind</string>
+    <string name="text_sunrise">Sunrise</string>
+    <string name="text_humidity">Humidity</string>
+    <string name="text_visibility">Visibility</string>
+    <string name="text_sunset">Sunset</string>
+
+    <string name="change_location_permission">Change location permission in app settings</string>
+    <string name="permission_rejection_text">Location permission is needed for showing current location weather.</string>
+    <string name="ok">OK</string>
 </resources>
