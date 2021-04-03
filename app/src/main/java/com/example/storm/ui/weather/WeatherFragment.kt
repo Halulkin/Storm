@@ -9,14 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.storm.databinding.FragmentWeatherBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherFragment : Fragment() {
 
-    private lateinit var weatherViewModel: WeatherViewModel
-    private var _binding: FragmentWeatherBinding? = null
+    private val weatherViewModel by viewModel<WeatherViewModel>()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -24,9 +23,6 @@ class WeatherFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        weatherViewModel =
-            ViewModelProvider(this).get(WeatherViewModel::class.java)
-
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
