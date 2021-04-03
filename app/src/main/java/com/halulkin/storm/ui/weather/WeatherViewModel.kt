@@ -1,15 +1,13 @@
 package com.halulkin.storm.ui.weather
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.halulkin.storm.base.RxViewModel
 import com.halulkin.storm.data.source.local.LocationRepository
 
 class WeatherViewModel(
     private val repository: LocationRepository
-) : ViewModel() {
+) : RxViewModel() {
 
     val location: LiveData<Location> get() = _location
     private val _location = repository.newLocation
