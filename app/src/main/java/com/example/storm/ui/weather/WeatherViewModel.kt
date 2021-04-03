@@ -16,4 +16,7 @@ class WeatherViewModel(
     fun startLocationUpdates() = repository.startLocationUpdates()
     fun stopLocationUpdates() = repository.stopLocationUpdates()
     fun getLastLocation() = repository.getLastLocation()
+
+
+
 }

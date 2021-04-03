@@ -1,12 +1,7 @@
 package com.example.storm.ui.weather
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.res.Resources
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -14,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.storm.R
@@ -37,8 +31,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class WeatherFragment : Fragment() {
 
     private val weatherViewModel by viewModel<WeatherViewModel>()
-    private lateinit var gpsSwitchStateReceiver: BroadcastReceiver
-    var gpsEnabled = false
 
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
@@ -49,49 +41,46 @@ class WeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-
-        getGpsLocation()
+        showWeather()
 
         weatherViewModel.location.observe(viewLifecycleOwner, {
-            Log.e(
-                "TAG",
-                "Update from far: " + it?.latitude.toString() + ", " + it?.longitude.toString()
-            )
             binding.tvCityName.text = it?.latitude.toString() + ", " + it?.longitude.toString()
+            binding.swiperefresh.isRefreshing = false
         })
 
-        return root
+        binding.swiperefresh.setOnRefreshListener {
+            showWeather()
+        }
+
+        return binding.root
+    }
+
+    private fun showWeather() {
+        val activity = requireActivity()
+        val gpsEnabled = activity.isGpsEnabled()
+
+        Log.e("TAG", "showWeather - gpsEnabled: $gpsEnabled")
+
+        if (activity.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            activity.isGpsEnabled()
+        ) {
+            weatherViewModel.getLastLocation()
+        } else {
+            getGpsLocation()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e(TAG, "onResume: ")
-        gpsEnabled = requireActivity().isGpsEnabled()
+        Log.e(TAG, "onResume:")
         weatherViewModel.startLocationUpdates()
-        registerGpsSwitchStateReceiver()
     }
 
     override fun onPause() {
         super.onPause()
         Log.e(TAG, "onPause:")
         weatherViewModel.stopLocationUpdates()
-        unregisterGpsSwitchStateReceiver()
-    }
-
-    fun setupViews() {
-        val activity = requireActivity()
-        if (activity.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-            gpsEnabled
-        ) {
-
-            binding.tvCityName.text = binding.tvCityName.text.toString().apply {
-                this + "Hello"
-            }
-        } else {
-            binding.tvCityName.text = "wewewewewe"
-        }
     }
 
     private fun getGpsLocation() {
@@ -112,11 +101,9 @@ class WeatherFragment : Fragment() {
                             builder.build()
                         )
                     result.addOnSuccessListener {
-//                        showWeather()
-                        weatherViewModel.startLocationUpdates()
+                        showWeather()
                         Toast.makeText(context, "Ready to show weather!", Toast.LENGTH_SHORT).show()
                         Log.e("TAG", "addOnSuccessListener")
-
                     }
                     // when permission.ACCESS_FINE_LOCATION granted, but location is disabled
                     // show location dialog
@@ -168,22 +155,6 @@ class WeatherFragment : Fragment() {
                     token?.continuePermissionRequest()
                 }
             }).check()
-    }
-
-    private fun registerGpsSwitchStateReceiver() {
-        gpsSwitchStateReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent?) {
-                gpsEnabled = context.isGpsEnabled()
-                setupViews()
-            }
-        }
-        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
-        filter.addAction(Intent.ACTION_PROVIDER_CHANGED)
-        requireActivity().registerReceiver(gpsSwitchStateReceiver, filter)
-    }
-
-    private fun unregisterGpsSwitchStateReceiver() {
-        requireActivity().unregisterReceiver(gpsSwitchStateReceiver)
     }
 
     override fun onDestroyView() {

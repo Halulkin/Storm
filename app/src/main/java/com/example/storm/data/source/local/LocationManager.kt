@@ -48,7 +48,7 @@ class LocationManager(private val context: Context) {
         if (!context.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) return
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             _newLocation.postValue(location)
-            Log.e(TAG, "startLocationUpdates: $location")
+            Log.e(TAG, "startLocationUpdates: ${location.latitude}")
         }
         try {
             fusedLocationClient.requestLocationUpdates(
