@@ -4,12 +4,11 @@ import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.halulkin.storm.utils.hasPermission
 import com.google.android.gms.location.*
+import com.halulkin.storm.utils.hasPermission
 import java.util.concurrent.TimeUnit
 
 class LocationManager(private val context: Context) {
@@ -48,7 +47,6 @@ class LocationManager(private val context: Context) {
         if (!context.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) return
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             _newLocation.postValue(location)
-            Log.e(TAG, "startLocationUpdates: ${location.latitude}")
         }
         try {
             fusedLocationClient.requestLocationUpdates(
@@ -64,14 +62,11 @@ class LocationManager(private val context: Context) {
     @MainThread
     fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
-        Log.e(TAG, "stopLocationUpdates:")
     }
 
     companion object {
-        private const val INTERVAL_DURATION_SECONDS = 1L
-        private const val FASTEST_INTERVAL_DURATION_SECONDS = INTERVAL_DURATION_SECONDS / 2
-        private const val MAX_WAIT_TIME_SECONDS = INTERVAL_DURATION_SECONDS * 2
-        private const val TAG = "LocationManager"
+        private const val INTERVAL_DURATION_SECONDS = 0L
+        private const val FASTEST_INTERVAL_DURATION_SECONDS = 0L
+        private const val MAX_WAIT_TIME_SECONDS = 0L
     }
-
 }

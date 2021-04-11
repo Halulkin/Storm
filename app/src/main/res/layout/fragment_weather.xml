@@ -40,10 +40,10 @@
 
             <TextView
                 android:id="@+id/tvDate"
+                bindDate="@{weatherVM.weatherResponse.dt}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="10 march"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -54,20 +54,19 @@
                 android:id="@+id/tvCityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PRAGUE"
+                android:text="@{weatherVM.weatherResponse.name}"
                 android:textColor="@color/white"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="@+id/tvDate"
                 app:layout_constraintStart_toStartOf="@+id/tvDate"
                 app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
-
             <TextView
                 android:id="@+id/tvTemperature"
+                bindFloat="@{weatherVM.weatherResponse.main.temp}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="18"
                 android:textColor="@color/white"
                 android:textSize="72sp"
                 app:layout_constraintEnd_toEndOf="@+id/tvCityName"
@@ -87,10 +86,10 @@
 
             <ImageView
                 android:id="@+id/ivState"
+                bindImage="@{weatherVM.weatherResponse.weather.get(0).icon}"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_01d"
                 app:layout_constraintBottom_toBottomOf="@+id/tvTemperature"
                 app:layout_constraintStart_toEndOf="@+id/tvTemperature"
                 app:layout_constraintTop_toTopOf="@+id/tvTemperature" />
@@ -136,7 +135,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp" />
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.main.pressure)}" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -178,7 +178,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp" />
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.wind.speed)}" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -219,8 +220,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:text="8:25" />
+                                bindTime="@{weatherVM.weatherResponse.sys.sunrise}"
+                                android:layout_marginBottom="5dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -261,7 +262,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp" />
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.main.humidity)}" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -305,7 +307,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp" />
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.visibility)}" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -347,8 +350,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:text="19:10" />
+                                bindTime="@{weatherVM.weatherResponse.sys.sunset}"
+                                android:layout_marginBottom="5dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"

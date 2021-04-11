@@ -1,27 +1,22 @@
 package com.halulkin.storm.ui.weather
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.storm.R
 import com.example.storm.databinding.FragmentWeatherBinding
-import com.halulkin.storm.utils.hasPermission
-import com.halulkin.storm.utils.isGpsEnabled
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.halulkin.storm.base.BaseFragment
-import com.halulkin.storm.base.RxViewModel
+import com.halulkin.storm.utils.ApiConfig.METRIC
+import com.halulkin.storm.utils.hasPermission
+import com.halulkin.storm.utils.isGpsEnabled
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -36,31 +31,37 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
     override val viewModel by viewModel<WeatherViewModel>()
 
     override fun initData() {
-
-        showWeather()
-
-        viewModel.location.observe(viewLifecycleOwner, {
-            binding.tvCityName.text = it?.latitude.toString() + ", " + it?.longitude.toString()
-            binding.swipeRefresh.isRefreshing = false
-        })
-
-        binding.swipeRefresh.setOnRefreshListener {
-            showWeather()
-        }
+        observeLocationChanges()
+        observeWeatherResponse()
 
         binding.apply {
             lifecycleOwner = this@WeatherFragment
-            viewModel.getData()
             weatherVM = viewModel
+            swipeRefresh.setOnRefreshListener {
+                getLocation()
+            }
         }
+        getLocation()
     }
 
-    private fun showWeather() {
+    private fun observeWeatherResponse() {
+        viewModel.weatherResponse.observe(viewLifecycleOwner, {
+            binding.swipeRefresh.isRefreshing = false
+        })
+    }
+
+    private fun observeLocationChanges() {
+        viewModel.location.observe(viewLifecycleOwner, {
+            if (it != null) {
+                viewModel.stopLocationUpdates()
+                viewModel.getWeatherByLocation(it, METRIC)
+            }
+        })
+    }
+
+    private fun getLocation() {
+        binding.swipeRefresh.isRefreshing = true
         val activity = requireActivity()
-        val gpsEnabled = activity.isGpsEnabled()
-
-        Log.e("TAG", "showWeather - gpsEnabled: $gpsEnabled")
-
         if (activity.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
             activity.isGpsEnabled()
         ) {
@@ -70,51 +71,24 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.e(TAG, "onResume:")
-        viewModel.startLocationUpdates()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e(TAG, "onPause:")
-        viewModel.stopLocationUpdates()
-    }
+    private val resolutionForResult =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
+            when (activityResult.resultCode) {
+                Activity.RESULT_OK -> viewModel.startLocationUpdates()
+                Activity.RESULT_CANCELED -> binding.swipeRefresh.isRefreshing = false
+            }
+            Log.e(TAG, "activityResult = ${activityResult.resultCode}")
+        }
 
     private fun getGpsLocation() {
-        Log.e("TAG", "getGpsLocation")
-
         Dexter.withContext(requireActivity())
             .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                    val locationReq = LocationRequest.create().apply {
-                        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                    }
-                    val builder = LocationSettingsRequest.Builder().apply {
-                        addLocationRequest(locationReq)
-                    }
-                    val result = LocationServices.getSettingsClient(requireActivity())
-                        .checkLocationSettings(
-                            builder.build()
-                        )
-                    result.addOnSuccessListener {
-                        showWeather()
-                        Toast.makeText(context, "Ready to show weather!", Toast.LENGTH_SHORT).show()
-                        Log.e("TAG", "addOnSuccessListener")
-                    }
-                    // when permission.ACCESS_FINE_LOCATION granted, but location is disabled
-                    // show location dialog
-                    result.addOnFailureListener { exception ->
-                        if (exception is ResolvableApiException) {
-                            Log.e("TAG", "addOnFailureListener")
-                            exception.startResolutionForResult(requireActivity(), 321)
-                        }
-                    }
+                    showEnableLocationSetting()
                 }
-
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    binding.swipeRefresh.isRefreshing = false
                     if (response.isPermanentlyDenied) {
                         // show snackBar allowing app setting navigation
                         Snackbar
@@ -124,8 +98,7 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                                 Snackbar.LENGTH_LONG
                             )
                             .setAction(getString(R.string.ok)) {
-                                val intent =
-                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 val uri: Uri = Uri.fromParts(
                                     "package",
                                     requireActivity().packageName,
@@ -133,20 +106,16 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                                 )
                                 intent.data = uri
                                 startActivity(intent)
-                            }
-                            .show()
+                            }.show()
                     } else {
                         // show snackBar with rationale
-                        Snackbar
-                            .make(
-                                binding.swipeRefresh,
-                                getString(R.string.permission_rejection_text),
-                                Snackbar.LENGTH_LONG
-                            )
-                            .show()
+                        Snackbar.make(
+                            binding.swipeRefresh,
+                            getString(R.string.permission_rejection_text),
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 }
-
                 override fun onPermissionRationaleShouldBeShown(
                     request: PermissionRequest?,
                     token: PermissionToken?
@@ -154,6 +123,32 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                     token?.continuePermissionRequest()
                 }
             }).check()
+    }
+
+    fun showEnableLocationSetting() {
+        activity?.let {
+            val locationRequest = LocationRequest.create()
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            val builder = LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest)
+            val task = LocationServices.getSettingsClient(it)
+                .checkLocationSettings(builder.build())
+            task.addOnSuccessListener {
+                getLocation()
+            }
+            task.addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        val intentSenderRequest =
+                            IntentSenderRequest.Builder(exception.resolution).build()
+                        resolutionForResult.launch(intentSenderRequest)
+                    } catch (throwable: Throwable) {
+                        // Ignore the error.
+                    }
+//                    exception.startResolutionForResult(requireActivity(), 321)
+                }
+            }
+        }
     }
 
     companion object {

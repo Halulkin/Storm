@@ -11,5 +11,4 @@ class LocationRepository(private val locationManager: LocationManager) {
     fun stopLocationUpdates() = locationManager.stopLocationUpdates()
 
     fun getLastLocation() = locationManager.getLastLocation()
-
 }
