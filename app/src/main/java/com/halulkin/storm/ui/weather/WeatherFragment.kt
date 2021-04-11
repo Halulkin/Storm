@@ -10,6 +10,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.storm.R
 import com.example.storm.databinding.FragmentWeatherBinding
+import com.github.matteobattilana.weather.PrecipType
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -47,6 +48,7 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
     private fun observeWeatherResponse() {
         viewModel.weatherResponse.observe(viewLifecycleOwner, {
             binding.swipeRefresh.isRefreshing = false
+            setupRandomWeatherBackground()
         })
     }
 
@@ -87,6 +89,7 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {
                     showEnableLocationSetting()
                 }
+
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     binding.swipeRefresh.isRefreshing = false
                     if (response.isPermanentlyDenied) {
@@ -116,6 +119,7 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                         ).show()
                     }
                 }
+
                 override fun onPermissionRationaleShouldBeShown(
                     request: PermissionRequest?,
                     token: PermissionToken?
@@ -147,6 +151,17 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                     }
 //                    exception.startResolutionForResult(requireActivity(), 321)
                 }
+            }
+        }
+    }
+
+    private fun setupRandomWeatherBackground() {
+        when ((1..2).random()) {
+            1 -> {
+                binding.weatherView.setWeatherData(PrecipType.RAIN)
+            }
+            2 -> {
+                binding.weatherView.setWeatherData(PrecipType.SNOW)
             }
         }
     }
