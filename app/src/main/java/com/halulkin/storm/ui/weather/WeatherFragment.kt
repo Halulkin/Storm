@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.storm.R
@@ -18,6 +17,8 @@ import com.halulkin.storm.base.BaseFragment
 import com.halulkin.storm.utils.ApiConfig.METRIC
 import com.halulkin.storm.utils.hasPermission
 import com.halulkin.storm.utils.isGpsEnabled
+import com.halulkin.storm.utils.tempLatitude
+import com.halulkin.storm.utils.tempLongitude
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -57,6 +58,8 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
             if (it != null) {
                 viewModel.stopLocationUpdates()
                 viewModel.getWeatherByLocation(it, METRIC)
+                tempLatitude = it.latitude
+                tempLongitude = it.longitude
             }
         })
     }
@@ -79,7 +82,6 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                 Activity.RESULT_OK -> viewModel.startLocationUpdates()
                 Activity.RESULT_CANCELED -> binding.swipeRefresh.isRefreshing = false
             }
-            Log.e(TAG, "activityResult = ${activityResult.resultCode}")
         }
 
     private fun getGpsLocation() {
@@ -163,9 +165,5 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                 binding.weatherView.setWeatherData(PrecipType.SNOW)
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "WeatherFragment"
     }
 }

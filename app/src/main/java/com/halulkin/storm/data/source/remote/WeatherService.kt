@@ -1,5 +1,6 @@
 package com.halulkin.storm.data.source.remote
 
+import com.halulkin.storm.data.model.ForecastResponse
 import com.halulkin.storm.data.model.WeatherResponse
 import com.halulkin.storm.utils.ApiEndPoint
 import io.reactivex.rxjava3.core.Observable
@@ -14,5 +15,12 @@ interface WeatherService {
         @Query("lon") longitude: String,
         @Query("units") units: String
     ): Observable<WeatherResponse>
+
+    @GET(ApiEndPoint.GET_FORECAST_BY_LOCATION)
+    fun getForecastByLocation(
+        @Query("lat") latitude: String,
+        @Query("lon") longitude: String,
+        @Query("units") units: String
+    ): Observable<ForecastResponse>
 
 }

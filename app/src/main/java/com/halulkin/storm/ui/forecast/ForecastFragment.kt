@@ -1,44 +1,34 @@
 package com.halulkin.storm.ui.forecast
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.location.Location
+import android.location.LocationManager
+import com.example.storm.R
 import com.example.storm.databinding.FragmentForecastBinding
+import com.halulkin.storm.base.BaseFragment
+import com.halulkin.storm.ui.adapters.ForecastAdapter
+import com.halulkin.storm.utils.ApiConfig.METRIC
+import com.halulkin.storm.utils.tempLatitude
+import com.halulkin.storm.utils.tempLongitude
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ForecastFragment : Fragment() {
+class ForecastFragment : BaseFragment<FragmentForecastBinding>() {
 
-    private lateinit var forecastViewModel: ForecastViewModel
-    private var _binding: FragmentForecastBinding? = null
+    override val layoutResource: Int get() = R.layout.fragment_forecast
+    override val viewModel by viewModel<ForecastViewModel>()
+    private val forecastAdapter = ForecastAdapter()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    var location = Location(LocationManager.GPS_PROVIDER)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        forecastViewModel =
-            ViewModelProvider(this).get(ForecastViewModel::class.java)
+    override fun initData() {
+        location.latitude = tempLatitude
+        location.longitude = tempLongitude
 
-        _binding = FragmentForecastBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        forecastViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        binding.apply {
+            viewModel.getForecast(location, METRIC)
+            lifecycleOwner = this@ForecastFragment
+            forecastVM = viewModel
+            recyclerForecast.adapter = forecastAdapter
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
