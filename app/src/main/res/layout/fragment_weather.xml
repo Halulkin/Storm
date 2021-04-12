@@ -98,282 +98,277 @@
                     app:layout_constraintStart_toEndOf="@+id/tvTemperature"
                     app:layout_constraintTop_toTopOf="@+id/tvTemperature" />
 
-                <com.google.android.material.card.MaterialCardView
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cv_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvPressure"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginBottom="8dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toTopOf="@+id/cvHumidity"
-                            app:layout_constraintEnd_toStartOf="@+id/cvWind"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvPressure"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toTopOf="@+id/cvHumidity"
+                        app:layout_constraintEnd_toStartOf="@+id/cvWind"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
 
-                            <LinearLayout
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_pressure" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_pressure" />
-
-                                <TextView
-                                    android:id="@+id/tvPressure"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@{String.valueOf(weatherVM.weatherResponse.main.pressure)}" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_pressure" />
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvWind"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/cvPressure"
-                            app:layout_constraintEnd_toStartOf="@+id/cvSunrise"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/cvPressure"
-                            app:layout_constraintTop_toTopOf="@+id/cvPressure">
-
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tvPressure"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.main.pressure)}" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_wind" />
-
-                                <TextView
-                                    android:id="@+id/tvWind"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@{String.valueOf(weatherVM.weatherResponse.wind.speed)}" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_wind" />
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvSunrise"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/cvWind"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/cvWind"
-                            app:layout_constraintTop_toTopOf="@+id/cvWind">
-
-                            <LinearLayout
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:text="@string/text_pressure" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_sunrise" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tvSunrise"
-                                    bindTime="@{weatherVM.weatherResponse.sys.sunrise}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp" />
+                    </androidx.cardview.widget.CardView>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_sunrise" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvWind"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvPressure"
+                        app:layout_constraintEnd_toStartOf="@+id/cvSunrise"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cvPressure"
+                        app:layout_constraintTop_toTopOf="@+id/cvPressure">
 
-                            </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvHumidity"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginBottom="72dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/cvVisibility"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent">
-
-                            <LinearLayout
+                            <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_wind" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_drops" />
-
-                                <TextView
-                                    android:id="@+id/tvHumidity"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@{String.valueOf(weatherVM.weatherResponse.main.humidity)}" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_humidity" />
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvVisibility"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="132dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/cvHumidity"
-                            app:layout_constraintEnd_toStartOf="@+id/cvSunset"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/cvHumidity"
-                            app:layout_constraintTop_toTopOf="@+id/cvHumidity"
-                            app:layout_constraintVertical_bias="1.0">
-
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tvWind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.wind.speed)}" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_direction" />
-
-                                <TextView
-                                    android:id="@+id/tvVisibility"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:text="@{String.valueOf(weatherVM.weatherResponse.visibility)}" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_visibility" />
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cvSunset"
-                            android:layout_width="0dp"
-                            android:layout_height="105dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardCornerRadius="10dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/cvVisibility"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/cvVisibility"
-                            app:layout_constraintTop_toTopOf="@+id/cvVisibility"
-                            app:layout_constraintVertical_bias="0.0">
-
-                            <LinearLayout
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                android:text="@string/text_wind" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@null"
-                                    android:src="@drawable/ic_sunrise" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/tvSunset"
-                                    bindTime="@{weatherVM.weatherResponse.sys.sunset}"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp" />
+                    </androidx.cardview.widget.CardView>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/text_sunset" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvSunrise"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvWind"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cvWind"
+                        app:layout_constraintTop_toTopOf="@+id/cvWind">
 
-                            </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        </androidx.cardview.widget.CardView>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_sunrise" />
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:id="@+id/tvSunrise"
+                                bindTime="@{weatherVM.weatherResponse.sys.sunrise}"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp" />
 
-                </com.google.android.material.card.MaterialCardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_sunrise" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvHumidity"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="72dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/cvVisibility"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_drops" />
+
+                            <TextView
+                                android:id="@+id/tvHumidity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.main.humidity)}" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_humidity" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvVisibility"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="132dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvHumidity"
+                        app:layout_constraintEnd_toStartOf="@+id/cvSunset"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cvHumidity"
+                        app:layout_constraintTop_toTopOf="@+id/cvHumidity"
+                        app:layout_constraintVertical_bias="1.0">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_direction" />
+
+                            <TextView
+                                android:id="@+id/tvVisibility"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="@{String.valueOf(weatherVM.weatherResponse.visibility)}" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_visibility" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvSunset"
+                        android:layout_width="0dp"
+                        android:layout_height="105dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cvVisibility"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cvVisibility"
+                        app:layout_constraintTop_toTopOf="@+id/cvVisibility"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_sunrise" />
+
+                            <TextView
+                                android:id="@+id/tvSunset"
+                                bindTime="@{weatherVM.weatherResponse.sys.sunset}"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_sunset" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

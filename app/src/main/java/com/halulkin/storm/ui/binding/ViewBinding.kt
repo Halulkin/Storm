@@ -35,7 +35,7 @@ object ViewBinding {
     fun bindImage(view: ImageView, urlImage: String?) {
         if (urlImage != null) {
             val iconUrl = "http://openweathermap.org/img/wn/$urlImage@2x.png"
-            Glide.with(view.context).load(iconUrl).error(R.drawable.ic_01d).into(view)
+            Glide.with(view.context).load(iconUrl).into(view)
         }
     }
 }

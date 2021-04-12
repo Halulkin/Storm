@@ -149,7 +149,6 @@ class WeatherFragment : BaseFragment<FragmentWeatherBinding>() {
                     } catch (throwable: Throwable) {
                         // Ignore the error.
                     }
-//                    exception.startResolutionForResult(requireActivity(), 321)
                 }
             }
         }
